@@ -11,10 +11,11 @@ const Price = db.collection("Price");
 
 module.exports.getPrice = async (req, res) => {
   const { fromAddress, toAddress, vehicle } = res.body;
-  let distance = {
+  let options = {
     method: "GET",
     url: `https://maps.googleapis.com/maps/api/geocode/json?addressfrom=${fromAddress}&sensor=false&key=${process.env.GEO_API}&addressTo=${toAddress}`,
   };
+  const distane = await axios(options);
 
   if (distance > 1000) {
     return res.status(404).json({ msg: "Distance is very much" });
@@ -37,7 +38,7 @@ module.exports.getPrice = async (req, res) => {
     price += restKms;
   }
   if (price > 50) {
-    return res.status(200).json(true);
+    return res.status(200).json({ msg: "Email Neeeded", bool: true });
   } else {
     return res.status(200).json(price);
   }
