@@ -4,6 +4,7 @@ connectDB();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const dotenv = require("dotenv").config();
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
