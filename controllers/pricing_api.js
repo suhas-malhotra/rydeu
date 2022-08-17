@@ -1,13 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-
-const { MongoClient } = require("mongodb");
-
-const url =
-  "mongodb+srv://suhass:pooja@cluster0.rspit.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(url);
-const db = client.db("suhas");
-const Price = db.collection("Price");
+const Price = require("../model/vehicle");
 
 module.exports.getPrice = async (req, res) => {
   const { fromAddress, toAddress, vehicle } = res.body;
@@ -23,7 +16,7 @@ module.exports.getPrice = async (req, res) => {
   if (distance > 1000) {
     return res.status(404).json({ msg: "Distance is very much" });
   }
-  //which vichle is used 
+  //which vichle is used
   const vehicleCosting = Price.findOne({ vehicle }, function (err) {
     if (err) {
       return res.status(404).json({ msg: "Something Went Wrong" });
@@ -32,11 +25,11 @@ module.exports.getPrice = async (req, res) => {
 
   //Throw ERROR
   //if no vehicle with given name is found
-  if(vehicleCosting.length == 0){
+  if (vehicleCosting.length == 0) {
     return res.status(404).json({ msg: "Type of Vehicle is Invalid" });
   }
   let price = 0;
-  //calculation the cost 
+  //calculation the cost
   if (vehicleCosting.baseKms >= distance) {
     price = vehicleCosting.baseAmount;
   } else {
